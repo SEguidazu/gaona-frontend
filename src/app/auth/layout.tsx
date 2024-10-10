@@ -1,3 +1,5 @@
+import PublicHeader from "@/components/header/PublicHeader";
+
 export default function AuthLayout({
   children,
 }: Readonly<{
@@ -5,6 +7,7 @@ export default function AuthLayout({
 }>) {
   return (
     <>
+      <PublicHeader />
       <main className="p-4">{children}</main>
     </>
   );
