@@ -1,7 +1,9 @@
 export default function Home() {
   return (
-    <main>
-      <h1>Inicio de Gaona ecommerce</h1>
-    </main>
+    <>
+      <main>
+        <h1>Home Page</h1>
+      </main>
+    </>
   );
 }
