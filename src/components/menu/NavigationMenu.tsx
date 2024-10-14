@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useStore } from "zustand";
+import useUserStore, { initialState } from "@/stores/user";
 
 import {
   NavigationMenu as NavigationMenuUi,
@@ -11,11 +13,10 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 
-interface NavigationMenuProps {
-  isSession?: boolean;
-}
+function NavigationMenu() {
+  const username = useStore(useUserStore, (state) => state.user.username);
+  const updateUser = useUserStore((state) => state.updateUser);
 
-function NavigationMenu({ isSession = false }: NavigationMenuProps) {
   return (
     <NavigationMenuUi>
       <NavigationMenuList>
@@ -26,8 +27,10 @@ function NavigationMenu({ isSession = false }: NavigationMenuProps) {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-        {isSession ? (
-          <Button onClick={() => {}}>Cerrar sesión</Button>
+        {!!username ? (
+          <Button onClick={() => updateUser(initialState)}>
+            Cerrar sesión
+          </Button>
         ) : (
           <>
             <NavigationMenuItem>

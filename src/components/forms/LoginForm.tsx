@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useUserStore from "@/stores/user";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+
+import { login } from "@/lib/strapi";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -33,6 +37,9 @@ function LoginForm() {
     message: string;
   } | null>(null);
 
+  const router = useRouter();
+  const updateUser = useUserStore((state) => state.updateUser);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,29 +48,42 @@ function LoginForm() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const data = {
+        identifier: values.email,
+        password: values.password,
+      };
 
-      if (!response.ok) {
-        const error = await response.json();
+      const response = await login(data);
+
+      if (response.error) {
         setErrorAlert({
           title: "Error",
-          message: error.message,
+          message: response.error.message,
         });
       } else {
         setErrorAlert(null);
+
+        const user = {
+          id: response.user.documentId,
+          username: response.user.username,
+          email: response.user.email,
+          jwt: response.jwt,
+        };
+        updateUser({ user });
+
+        router.push("/");
       }
     } catch (error) {
       console.error(error);
+      setErrorAlert({
+        title: "Server error",
+        message:
+          "Tuvimos un error al procesar tu solicitud. Intentalo más tarde.",
+      });
     }
-  };
+  }
 
   return (
     <Form {...form}>

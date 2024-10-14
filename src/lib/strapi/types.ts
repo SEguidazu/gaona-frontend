@@ -5,6 +5,11 @@ export type CreateUser = {
   role: Role;
 };
 
+export type Login = {
+  identifier: string;
+  password: string;
+};
+
 export enum Role {
   Authenticated = 1,
   Public = 2,
