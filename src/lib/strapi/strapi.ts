@@ -1,10 +1,8 @@
-export function query(url: string, options?: RequestInit) {
-  const STRAPI_API = process.env.STRAPI_API;
-  const STRAPI_TOKEN = process.env.STRAPI_TOKEN;
+const STRAPI_API: string = process.env.STRAPI_API ?? "";
 
+export function query(url: string, options?: RequestInit) {
   return fetch(`${STRAPI_API}${url}`, {
     headers: {
-      Authorization: `Bearer ${STRAPI_TOKEN}`,
       "Content-Type": "application/json",
     },
     ...options,

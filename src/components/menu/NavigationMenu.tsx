@@ -13,20 +13,30 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 
-function NavigationMenu() {
+import { MainMenu } from "@/components/types";
+
+interface NavigationMenuProps {
+  menu: MainMenu[];
+}
+
+function NavigationMenu({ menu = [] }: NavigationMenuProps) {
   const username = useStore(useUserStore, (state) => state.user.username);
   const updateUser = useUserStore((state) => state.updateUser);
+
+  console.log({ menu });
 
   return (
     <NavigationMenuUi>
       <NavigationMenuList>
-        <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Página principal
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
+        {menu.map((item) => (
+          <NavigationMenuItem key={item.id}>
+            <Link href={item.link} legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Página principal
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+        ))}
         {!!username ? (
           <Button onClick={() => updateUser(initialState)}>
             Cerrar sesión

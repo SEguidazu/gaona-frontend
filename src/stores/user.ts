@@ -2,10 +2,10 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 type User = {
-  id: string;
-  username: string;
-  email: string;
-  jwt: string;
+  id: string | null;
+  username: string | null;
+  email: string | null;
+  jwt: string | null;
 };
 
 type State = {
@@ -14,10 +14,10 @@ type State = {
 
 export const initialState: State = {
   user: {
-    id: "",
-    username: "",
-    email: "",
-    jwt: "",
+    id: null,
+    username: null,
+    email: null,
+    jwt: null,
   },
 };
 
