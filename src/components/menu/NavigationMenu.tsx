@@ -32,7 +32,7 @@ function NavigationMenu({ menu = [] }: NavigationMenuProps) {
           <NavigationMenuItem key={item.id}>
             <Link href={item.link} legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Página principal
+                {item.name}
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
